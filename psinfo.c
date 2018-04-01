@@ -73,10 +73,10 @@ int main(int argc, char *argv[]){
   }
   return 0;
 }
-/*
-Este método traerá las características del proceso con id ingresado por parámetro.
-Además dependiendo de la bandera imprimirá o escribirá en un archivo dichas características:
-0 para imprimir en pantalla, cualquier otro valor para escribir en un archivo.
+/**
+* Este método traerá las características del proceso con id ingresado por parámetro.
+* Además dependiendo de la bandera imprimirá o escribirá en un archivo dichas características:
+* 0 para imprimir en pantalla, cualquier otro valor para escribir en un archivo.
 */
 void procesarProceso(char *id, int bandera){
   
@@ -136,23 +136,27 @@ void procesarProceso(char *id, int bandera){
   //exit(0);
 }
 
-//Este método imprimirá a información del proceso en consola.
+///Este método imprimirá a información del proceso en consola.
 void imprimirProceso(Proceso p){
   printf("Pid: %sEl nombre del proceso es: %sEl estado del proceso es: %sEl tamano total de imagen en memoria es: %s Tamano de la memoria en la region TEXT es: %s Tamano de la memoria en la region DATA es: %s Tamano de la memoria en la region STACK es: %sNumero de cambios de contexto realizados:\n Voluntarios: %s No voluntarios: %s\n", 
           p.id, p.nombre, p.estado, p.tam.total, p.tam.text, p.tam.data, p.tam.stack, p.cambiosv, p.cambiosi);
 }
 
-//Este método guardará la información del proceso en un archivo.
+/**
+ * Este método guardará la información del proceso en un archivo.
+ * 
+ */
 void guardarProceso(Proceso p){
   fprintf(fpr, "Pid: %sEl nombre del proceso es: %sEl estado del proceso es: %sEl tamano total de imagen en memoria es: %s Tamano de la memoria en la region TEXT es: %s Tamano de la memoria en la region DATA es: %s Tamano de la memoria en la region STACK es: %sNumero de cambios de contexto realizados:\n Voluntarios: %s No voluntarios: %s\n", 
           p.id, p.nombre, p.estado, p.tam.total, p.tam.text, p.tam.data, p.tam.stack, p.cambiosv, p.cambiosi);
 }
 
-//Este metodo validará si el archivo que se desea abrir existe, recibe como parametro el id ingresado por el usuario para cada proceso y retornará 1 en caso de que exista y 0 en caso contrario.
-
+/**
+ * Este metodo validará si el archivo que se desea abrir existe, recibe como parametro el id ingresado por el usuario para cada proceso y retornará 1 en caso de que exista y 0 en caso contrario.
+ */
 int  validararchivo(char *id){
    
-  //Se iniciliza la ruta del archivo que contiene la información del estado del proceso.
+  ///Se iniciliza la ruta del archivo que contiene la información del estado del proceso.
   strcpy(ruta, "/proc/");
   strcat(ruta, id );
   strcat(ruta, "/status" );

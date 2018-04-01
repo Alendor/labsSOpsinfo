@@ -1,0 +1,32 @@
+\hypertarget{structProceso}{}\section{Proceso Struct Reference}
+\label{structProceso}\index{Proceso@{Proceso}}
+
+
+Collaboration diagram for Proceso\+:
+% FIG 0
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+char {\bfseries id} \mbox{[}20\mbox{]}\hypertarget{structProceso_a631e3f67ed5669446facfb2ba0888611}{}\label{structProceso_a631e3f67ed5669446facfb2ba0888611}
+
+\item 
+char {\bfseries nombre} \mbox{[}20\mbox{]}\hypertarget{structProceso_a0c1dd96a39323c4674a2e455178aa7ea}{}\label{structProceso_a0c1dd96a39323c4674a2e455178aa7ea}
+
+\item 
+char {\bfseries estado} \mbox{[}25\mbox{]}\hypertarget{structProceso_af835ce1967602a829841974eabb9c3f0}{}\label{structProceso_af835ce1967602a829841974eabb9c3f0}
+
+\item 
+\hyperlink{structTamano}{Tamano} {\bfseries tam}\hypertarget{structProceso_a63d7123542516a1bac902740d62e7417}{}\label{structProceso_a63d7123542516a1bac902740d62e7417}
+
+\item 
+char {\bfseries cambiosv} \mbox{[}20\mbox{]}\hypertarget{structProceso_a9fd16e91da18db14bba1fa77e13db961}{}\label{structProceso_a9fd16e91da18db14bba1fa77e13db961}
+
+\item 
+char {\bfseries cambiosi} \mbox{[}20\mbox{]}\hypertarget{structProceso_aaba76f178592236074040587352cb66e}{}\label{structProceso_aaba76f178592236074040587352cb66e}
+
+\end{DoxyCompactItemize}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+psinfo.\+c\end{DoxyCompactItemize}
