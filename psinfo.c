@@ -88,11 +88,10 @@ void procesarProceso(char *id, int bandera){
   };
   char linea[200];
   char ruta[80];
-  strcpy(ruta,"ejem2.txt"); //PRUEBA PORQUE NO TENGO LINUX
   //Se iniciliza la ruta del archivo que contiene la información del estado del proceso.
-  /**strcpy(ruta, "/proc/");
+  strcpy(ruta, "/proc/");
   strcat(ruta, id );
-  strcat(ruta, "/status" );*/
+  strcat(ruta, "/status" );
   //Se abre el archivo.
   fp = fopen(ruta, "r");
   if (fp == NULL){
