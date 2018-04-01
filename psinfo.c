@@ -13,7 +13,7 @@ struct Tamano{
 typedef struct Tamano Tamano;
 
 struct Proceso{
-  char id[10];
+  char id[20];
   char nombre[20];
   char estado[25];
   Tamano tam;
@@ -23,29 +23,46 @@ struct Proceso{
 
 typedef struct Proceso Proceso;
 
-FILE *fp;
-char ruta[80];
+//Variables globales a utilizar.
+FILE *fpr;
 
 //Definición de las funciones a utilizar.
 void procesarProceso(char *, int);
 void imprimirProceso(Proceso);
 void guardarProceso(Proceso);
 
+//Método principal.
 int main(int argc, char *argv[]){
-  int bandera = 0;
-
-  if(argc == 1){
-    printf("No se ingresó ningún parámetro.\n");
-  } else if(strncmp( argv[1], "-l", 3) == 0 || strncmp( argv[1], "-r", 3) == 0){
-    printf("no y qué");
-    if(strncmp( argv[1], "-r", 3) == 0){
-      bandera = 1;
-    } 
+  if(argc == 1 || ((strncmp( argv[1], "-l", 3) == 0 || strncmp( argv[1], "-r", 3) == 0) && argc == 2)){ //Primero se rectifica que sí hayan ingresado procesos como parámetros.
+    printf("No se ingresó ningún proceso como parámetro.\n");
+    exit(1);
+  } else if(strncmp( argv[1], "-l", 3) == 0){ //Se identifica si se usa la bandera -l.
+    //Se hace el proceso de obtención de información y escritura en consola de cada uno de los procesos ingresados como parámetros.
     for(int index = 2; index < argc; ++index){
-       procesarProceso(argv[index], bandera);
+       procesarProceso(argv[index], 0);
     }
-  } else{
-    procesarProceso(argv[1], bandera);
+  } else if(strncmp( argv[1], "-r", 3) == 0){ //Se identifica si se usa la bandera -r.
+    char nombreArchivo[50]; //Nombre del archivo que se creará.
+    strcpy(nombreArchivo, "psinfo-report");
+    for(int index = 2; index < argc; ++index){
+        strcat(nombreArchivo, "-");
+        strcat(nombreArchivo, argv[index]);
+      }
+    strcat(nombreArchivo, ".info");
+    //Se crea el archivo donde se escribirá la información de los procesos.
+    fpr = fopen(nombreArchivo, "w");
+    if (fpr == NULL){
+      printf("No se pudo crear el archivo.");
+      exit(1);
+    }
+    //Se hace el proceso de obtención de información y escritura en el archivo de cada uno de los procesos ingresados como parámetros.
+    for(int index = 2; index < argc; ++index){
+       procesarProceso(argv[index], 1);
+    }
+    fclose(fpr);
+    printf("Archivo de salida generado: %s", nombreArchivo);
+  } else{ //Si no es ninguno de los casos anteriores, se dará por entendido que sólo ingresó el pid de un proceso por parámetro. En caso de haber ingresado más sólo tomará en cuenta el primero.
+    procesarProceso(argv[1], 0);
   }
   return 0;
 }
@@ -55,58 +72,63 @@ Además dependiendo de la bandera imprimirá o escribirá en un archivo dichas c
 0 para imprimir en pantalla, cualquier otro valor para escribir en un archivo.
 */
 void procesarProceso(char *id, int bandera){
-  Proceso proc;
-  char aux[200];
-  //strcpy(ruta,"ejem.txt"); PRUEBA PORQUE NO TENGO LINUX
-  strcpy(ruta, "/proc/");
+  FILE *fp;
+  Proceso proc = {
+    "No disponible\n",
+    "No disponible\n",
+    "No disponible\n",
+    {
+      "No disponible\n",
+      "No disponible\n",
+      "No disponible\n",
+      "No disponible\n"
+    },
+    "No disponible\n",
+    "No disponible\n"
+  };
+  char linea[200];
+  char ruta[80];
+  strcpy(ruta,"ejem2.txt"); //PRUEBA PORQUE NO TENGO LINUX
+  //Se iniciliza la ruta del archivo que contiene la información del estado del proceso.
+  /**strcpy(ruta, "/proc/");
   strcat(ruta, id );
-  strcat(ruta, "/status" );
+  strcat(ruta, "/status" );*/
+  //Se abre el archivo.
   fp = fopen(ruta, "r");
   if (fp == NULL){
-    printf("Can not open %s\n", ruta);
+    printf("El proceso %s no existe actualmente.\n", ruta);
     exit(1);
   }
-  printf("Archivo abierto\n");
+  //Se inicializa el PID del proceso.
   strcpy(proc.id, id);
-  for (int i = 0; i < 54; i++){
-    if (i == 0){
-      fgets(aux, 200, fp);
-      strcpy(proc.nombre, aux);
-    }
-    else if (i == 2){
-      fgets(aux, 200, fp);
-      strcpy(proc.estado, aux);
-    }
-    else if (i == 16){
-      fgets(aux, 200, fp);
-      strcpy(proc.tam.total, aux);
-    }
-    else if (i == 27){
-      fgets(aux, 200, fp);
-      strcpy(proc.tam.text, aux);
-    }
-    else if (i == 25){
-      fgets(aux, 200, fp);
-      strcpy(proc.tam.data, aux);
-    }
-    else if (i == 26){
-      fgets(aux, 200, fp);
-      strcpy(proc.tam.stack, aux);
-    }
-    else if (i == 52){
-      fgets(aux, 200, fp);
-      strcpy(proc.cambiosv, aux);
-    }
-    else if (i == 53){
-      fgets(aux, 200, fp);
-      strcpy(proc.cambiosi, aux);
-    }
-    else{
-      fgets(aux, 200, fp);
+  strcat(proc.id, "\n");
+  //Se recorre el archivo línea por línea para capturar la información necesaria.
+  while(fgets(linea, 200, fp) != NULL){
+    //La variable dato contedrá sólo la información del parámetro (se elimina el título: name, state, etc...).
+    char *dato, *h;
+    dato = strchr(linea, 9); //9 es el codigo ASCII para el tab horizontal.
+    dato++;
+    if(strncmp(linea, "Name", 4) == 0){
+      strcpy(proc.nombre, dato);
+    } else if(strncmp(linea, "State", 5) == 0){
+      strcpy(proc.estado, dato);
+    } else if(strncmp(linea, "VmSize", 6) == 0){
+      strcpy(proc.tam.total, dato);
+    } else if(strncmp(linea, "VmExe", 5) == 0){
+      strcpy(proc.tam.text, dato);
+    } else if(strncmp(linea, "VmData", 6) == 0){
+      strcpy(proc.tam.data, dato);
+    } else if(strncmp(linea, "VmStk", 5) == 0){
+      strcpy(proc.tam.stack, dato);
+    } else if(strncmp(linea, "voluntary", 9) == 0){
+      strcpy(proc.cambiosv, dato);
+    } else if(strncmp(linea, "nonvoluntary", 12) == 0){
+      strcpy(proc.cambiosi, dato);
     }
   }
+  //Se cierra el archivo.
   fclose(fp);
-  printf("Archivo cerrado\n");
+  //según el parámetro ingresado se llama el método para imprimir en consola o guardar en archivo.
   if(bandera == 0){
     imprimirProceso(proc);
   } else{
@@ -115,18 +137,14 @@ void procesarProceso(char *id, int bandera){
   //exit(0);
 }
 
+//Este método imprimirá a información del proceso en consola.
 void imprimirProceso(Proceso p){
-  printf("Pid: %s\nEl nombre del proceso es: %s\nEl estado del proceso es: %s\nEl tamano Maximo del proceso es: %s\nTamano de la memoria en la región TEXT es: %s\nTamano de la memoria en la región DATA es: %s\nTamano de la memoria en la región STACK es: %s\nNumero de cambios de contexto realizados(voluntarios - no voluntarios): %s - %s\n", 
+  printf("Pid: %sEl nombre del proceso es: %sEl estado del proceso es: %sEl tamano total de imagen en memoria es: %s Tamano de la memoria en la region TEXT es: %s Tamano de la memoria en la region DATA es: %s Tamano de la memoria en la region STACK es: %sNumero de cambios de contexto realizados:\n Voluntarios: %s No voluntarios: %s\n", 
           p.id, p.nombre, p.estado, p.tam.total, p.tam.text, p.tam.data, p.tam.stack, p.cambiosv, p.cambiosi);
 }
 
+//Este método guardará la información del proceso en un archivo.
 void guardarProceso(Proceso p){
-  fp = fopen("psinfo-report-XXXXX.info", "w");
-  if (fp == NULL){
-    printf("No se pudo crear el archivo");
-    exit(1);
-  }
-  fprintf(fp, "Pid: %s\nEl nombre del proceso es: %s\nEl estado del proceso es: %s\nEl tamano Maximo del proceso es: %s\nTamano de la memoria en la región TEXT es: %s\nTamano de la memoria en la región DATA es: %s\nTamano de la memoria en la región STACK es: %s\nNumero de cambios de contexto realizados(voluntarios - no voluntarios): %s - %s\n", 
+  fprintf(fpr, "Pid: %sEl nombre del proceso es: %sEl estado del proceso es: %sEl tamano total de imagen en memoria es: %s Tamano de la memoria en la region TEXT es: %s Tamano de la memoria en la region DATA es: %s Tamano de la memoria en la region STACK es: %sNumero de cambios de contexto realizados:\n Voluntarios: %s No voluntarios: %s\n", 
           p.id, p.nombre, p.estado, p.tam.total, p.tam.text, p.tam.data, p.tam.stack, p.cambiosv, p.cambiosi);
-  fclose(fp);
 }
