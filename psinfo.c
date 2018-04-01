@@ -95,7 +95,7 @@ void procesarProceso(char *id, int bandera){
   };
   char linea[200];
   if(validararchivo(id)==0){
-   printf("El archivo %s no se encuentra actualmente, es probable que el proceso %s no exista.\n\n", ruta, id);
+   printf("El archivo %s no se encuentra actualmente, es probable que el proceso %s no exista o este ingresando un PID invalido.\n\n", ruta, id);
    return;
   }
   //Se inicializa el PID del proceso.
