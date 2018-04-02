@@ -54,8 +54,12 @@ int main(int argc, char *argv[]){
         }else{
           printf("El proceso %s no existe actualmente, por ende no se incluira en el archivo.\n", argv[index]);
         }
-      }
+      }  
     strcat(nombreArchivo, ".info");
+    if(strncmp(nombreArchivo, "psinfo-report.info", 17) == 0){
+      printf("Ninguno de los procesos ingresados existe actualmente.\n");
+      exit(1);
+    }
     //Se crea el archivo donde se escribirá la información de los procesos.
     fpr = fopen(nombreArchivo, "w");
     if (fpr == NULL){

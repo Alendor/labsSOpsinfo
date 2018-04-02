@@ -1,0 +1,11 @@
+Pid: 1
+El nombre del proceso es: systemd
+El estado del proceso es: S (sleeping)
+El tamano total de imagen en memoria es:   185272 kB
+ Tamano de la memoria en la region TEXT es:     1392 kB
+ Tamano de la memoria en la region DATA es:   149024 kB
+ Tamano de la memoria en la region STACK es:      132 kB
+Numero de cambios de contexto realizados:
+ Voluntarios: 3403
+ No voluntarios: 237
+

@@ -1,0 +1,22 @@
+Pid: 28258
+El nombre del proceso es: indicator-print
+El estado del proceso es: S (sleeping)
+El tamano total de imagen en memoria es:   540528 kB
+ Tamano de la memoria en la region TEXT es:       52 kB
+ Tamano de la memoria en la region DATA es:   297780 kB
+ Tamano de la memoria en la region STACK es:      132 kB
+Numero de cambios de contexto realizados:
+ Voluntarios: 156
+ No voluntarios: 109
+
+Pid: 28314
+El nombre del proceso es: dconf-service
+El estado del proceso es: S (sleeping)
+El tamano total de imagen en memoria es:   178652 kB
+ Tamano de la memoria en la region TEXT es:       72 kB
+ Tamano de la memoria en la region DATA es:   147964 kB
+ Tamano de la memoria en la region STACK es:      132 kB
+Numero de cambios de contexto realizados:
+ Voluntarios: 80
+ No voluntarios: 2
+
